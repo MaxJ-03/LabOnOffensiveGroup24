@@ -1,0 +1,11 @@
+/*.loginBtn{background-image:url(../images/loginButton.gif); background-repeat:no-repeat; width:60px; height:21px; float:left;}*/
+.loginBtn{background:url(../images/lg.png);width:90px;height:30px; float:center; line-height:26px;COLOR:#000000; text-shadow:d1; FONT-FAMILY:arial;font-weight:bolder;text-align:center;}
+.lgInput{width:125px;width:123px\0;*width:123px;height:19px;background:url(../images/tbg3.gif); border:0px;color:#FFF}
+button{background:#bde6f3; /*height:24px;*/ text-align:center; line-height:20px;}
+.selediv{_height:14px;}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	/*#passwd{ width:50px; overflow:hidden;}
+	#username{ width:147px;}
+	#loginmlsel{ overflow:auto; overflow-style:auto;}
+	#login_language{background:#ffffff;}*/
+}

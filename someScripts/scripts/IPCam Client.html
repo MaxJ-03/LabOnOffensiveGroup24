@@ -1,0 +1,1174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0023)http://192.168.1.50:88/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>IPCam Client</title>
+<script>
+/*when login page to refresh once to resolve cache*/
+	(function(){
+	function setCookie(name, value) {
+    if (typeof (value) == "undefined") return;
+    var Days = 300;
+    var exp = new Date();
+    exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+    document.cookie = name + "=" + value + ";expires=" + exp.toGMTString(); 
+  }
+function getCookie(name) {
+    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+    if (arr != null)
+    return arr[2]; 
+    return null;
+}
+function delCookie(name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval = getCookie(name);
+    if (cval != null) 
+    document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
+if(window.navigator.userAgent.indexOf("MSIE")!=-1||window.navigator.userAgent.indexOf("Trident")!=-1)
+{
+	return ;
+}
+if(typeof document.cookie != 'undefined')
+{
+	if(getCookie("first")=="1")
+	{
+		delCookie("first");
+		if(console)
+		{
+		//console.log("每次进入刷新一次");
+		}
+		location.reload();
+	}
+	else
+	{
+		setCookie("first","1");
+	}
+}
+}
+)
+();
+</script>
+<script src="./IPCam Client_files/jquery-1.4.4.min.js.download" type="text/javascript"></script>
+<script src="./IPCam Client_files/flv.js.download" type="text/javascript"></script>
+<script type="text/javascript">
+    var ver = (new Date()).getTime();
+    document.write('<script type="text/javascript" src="js/ansiUrlCodec.js?ver=' + ver + '"><'+ '/script>');
+    document.write('<script type="text/javascript" src="js/language.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/common.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/browser.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/class.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/main.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/var.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/websocket_service_manager.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/websocket_core.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/classwy.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/upfile.js?ver=' + ver + '"><' + '/script>');
+    document.write('<script type="text/javascript" src="js/brand.js?ver=' + ver + '"><' + '/script>');
+</script><script type="text/javascript" src="./IPCam Client_files/ansiUrlCodec.js.download"></script><script type="text/javascript" src="./IPCam Client_files/language.js.download"></script><script type="text/javascript" src="./IPCam Client_files/common.js.download"></script><script type="text/javascript" src="./IPCam Client_files/browser.js.download"></script><script type="text/javascript" src="./IPCam Client_files/class.js.download"></script><script type="text/javascript" src="./IPCam Client_files/main.js.download"></script><script type="text/javascript" src="./IPCam Client_files/var.js.download"></script><script type="text/javascript" src="./IPCam Client_files/websocket_service_manager.js.download"></script><script type="text/javascript" src="./IPCam Client_files/websocket_core.js.download"></script><script type="text/javascript" src="./IPCam Client_files/classwy.js.download"></script><script type="text/javascript" src="./IPCam Client_files/upfile.js.download"></script><script type="text/javascript" src="./IPCam Client_files/brand.js.download"></script>
+<script language="javascript" type="text/javascript">
+function GetRecordPathCallBack(data){}
+function GetFileSizeByPathCallBack(date){}
+function SelectRecordPathCallBack(data){}
+function UpdateFirmFilePathCallBack(data){}
+function moduleDidLoad() {
+	gDvr.obj = document.getElementsByTagName("Embed");
+	for(var i=0; i<1; i++) 
+        gDvr.Init(i, gVar.nDate);
+}    
+function SetSnapPicture(data)
+{
+		// console.log(data);
+        document.getElementById("hdvalue").value = "";//清空之前数据
+		var PicDate = "data:image/jpeg;base64," + data;
+		document.getElementById("hdvalue").value = PicDate;
+       // window.open("/html/snap.html", "newwindow");
+        var a = $("<a href='/html/snap.html' target='_blank'></a>").get(0);
+        if ($.browser.msie) 
+            {
+                window.open(a);
+            }else {
+                if (document.createEvent) {
+                    var evObj = document.createEvent('MouseEvents')
+                    evObj.initEvent('click', true, false)
+                    a.dispatchEvent(evObj)
+                }
+                else if (document.createEventObject) {
+                    a.fireEvent('onclick')
+                }
+        }
+}
+
+function checkPlugin() {
+    if(H5Live){
+        $("#plugin").html('<video name="videoElement" id="videoTag" class="centeredVideo" width="100%" height="100%" preload="none" autoplay playsinline></video><video name="audioElement" id="audioTag" class="centeredAudio" style="display:none;" preload="none" autoplay playsinline></video><div id="connectErrorTxt"></div><div id="videoSignGreen"></div><div id="videoSignRed"></div>');
+        $("video").bind("contextmenu",function(){//取消video 鼠标右键事件
+            return false;
+        });
+    }else{
+        var prms = {
+            "allowFullScreen": "true",
+            "allowScriptAccess": "sameDomain"
+        };
+        $("#plugin").html('<embed src="plugin/FoscamFlashPlayer.swf" id="flashPlayer" width="100%" height="100%" allowScriptAccess="sameDomain" allowFullScreen="true">');
+        try {
+            gDvr.obj = document.getElementsByTagName("embed");
+            isplugin = true;
+        } catch (e) {
+            isplugin = false;
+        }
+    }
+}
+
+function VersionCheck(data)
+{
+	//check plugin version
+    vsIf = data;
+    var v1 = vsIf.split(".");   //plugin version
+    var v2 = pVersion.split(".");    //web version
+    var needUpdate = false;
+    for(var m = 0; m < 4; m++){
+        if(v2[m] * 1 > v1[m] * 1){
+            needUpdate = true;
+            break;
+        }else if(v2[m] * 1 == v1[m] * 1){
+            continue;
+        }else{
+            needUpdate = false;
+            break;
+        }
+    }
+	  if (needUpdate) {
+        var browserName = navigator.userAgent.toLowerCase();
+        var obj = document.getElementById("downPlugins");
+        
+        //console.log(browserName);
+        if (/chrome/i.test(browserName)) {
+            obj.innerHTML = '<a id="down" href="IPCWebComponents.exe">' + lg.get("IDS_PLUGIN_UPDATE_TIP") + '</a>';
+        }
+        else {
+            obj.innerHTML = '<a id="down" href="http://download.foscam.com/plugin-a">' + lg.get("IDS_PLUGIN_UPDATE_TIP") + '</a>';
+        }
+	  }
+}
+
+// Firefox Chrome edge call this function if plugin is not exist
+function DownServer() {
+	 if(IsChromeSupportNacl() || IsFirefox() || IsEdge()){
+         var obj = document.getElementById("downPlugins");
+         obj.innerHTML = '<a id="down" href="IPCWebComponents.exe">' + lg.get("IDS_LOGIN_KJ") + '</a>';
+	 }
+	 
+	 if(IsSarfariSupportH5()){
+		var obj = document.getElementById("downPlugins"); 
+         obj.innerHTML = '<a id="down" href="http://download.foscam.com/plugin-a">' + lg.get("IDS_LOGIN_KJ") + '</a>';   
+	 }
+}
+	
+function log(str){
+    //console.log(str);
+}
+function consoleMsg(str){
+    var browserName = navigator.userAgent.toLowerCase();
+    if( !(/trident/i.test(browserName)) ){
+        //console.log(str);
+    }
+}
+function handleMessage(msg) 
+{ 
+   try 
+   {
+    consoleMsg("handleMessage");
+    eval(msg.data.split("\r\n").join("").split("\n").join(""));
+    naclState = true;
+   } 
+   catch (e)
+   { 
+        //alert(e); 
+        //alert(msg.data); 
+   } 
+}
+function ShowCircle(name, show){
+	if (IsChromeSupportNacl())
+	{
+		if(show) show="inline";
+		else show = "none";
+		$("#circle"+name).css("display", show);
+	}
+}
+function ShowConTip(show) {
+    if (IsChromeSupportNacl()) {
+        if (show) show = "inline";
+        else show = "none";
+        $("#connectTip").css("display", show);
+    }
+}
+function naclCall(){}
+function doEvent(){}
+function ReSize(){}
+$(function () {
+    gDvr = new DvrInfo();
+    browserVer = new IsBrowserVersion();
+    //监听滚动条事件,出现滚动条调用插件刷新窗口的接口UpdatePluginWindow,IE调用，其他浏览器不调用
+    window.onscroll = function(){
+        var t = document.documentElement.scrollTop || document.body.scrollTop;
+        if(t >= 0){
+            if(browserVer.browsers == "Internet Explorer" || browserVer.browsers == "IE11"){
+                for(var i=0;i<9;i++){
+                    try{
+                        gDvr.UpdatePluginWindow(i);
+                    }catch(e){}
+                }
+            }
+        }
+    }
+    var isIE11 = true;
+    var sVersion = "5.1.0.10";  //web safari plugin version
+    var s = navigator.userAgent.split("Trident");
+    if (typeof s[1] == 'undefined') {
+        isIE11 = false;
+    }
+    function DownPluginTip() { }
+    var isIE = true;
+    if(browserVer.browsers == "safari" && !isIE11 && !H5Live_Safari){
+        isIE = false;
+        doEvent = doEvent1;
+        ReSize = function () { try { $("#gsliderCov").trigger("sChange"); } catch (e) { } }
+        var plugins = navigator.mimeTypes;
+        var plugin = false;
+        for (var pi = 0; pi < plugins.length; pi++) {
+            if (plugins[pi].type == "application/ipcam-regplugin") {
+                vsIf = plugins[pi].enabledPlugin.description.split("-");
+                if (vsIf.length == 2) vsIf = vsIf[1];
+                else vsIf = "";
+                plugin = true; break;
+            }
+        }
+        if (!plugin) {
+            DownPluginTip = function () {
+                var browserName = navigator.userAgent.toLowerCase();
+                var obj = document.getElementById("downPlugins");
+                var obj2 = document.getElementById("helpInformation");
+                if (/firefox/i.test(browserName)) {
+                    if(browserPlatform == "win64" || browserPlatform == "macintel") return;
+                    obj.innerHTML = '<a id="down" href="IPCWebComponents.exe">' + lg.get("IDS_LOGIN_KJ") + '</a>';
+                    obj2.innerHTML = '<a id="down2" href="https://www.foscam.com/faqs/view.html?id=14#firefox" target="_blank">' + lg.get("IDS_PLUGINS_EXCEPTION_LINK") + '</a>';
+                }
+                else {
+                    obj.innerHTML = '<a id="down" href="http://download.foscam.com/plugin-a">' + lg.get("IDS_LOGIN_KJ") + '</a>';
+		    obj2.innerHTML = '<a id="down2" href="https://www.foscam.com/faqs/view.html?id=14#safari" target="_blank">' + lg.get("IDS_PLUGINS_EXCEPTION_LINK") + '</a>';
+                }
+            }
+        }
+        else {
+            //check plugin version
+            var v2;
+            var v1 = vsIf.split(".");   //plugin version
+            if (/firefox/i.test(browserName)) {
+                v2 = pVersion.split(".");    //web version
+            } else {
+                v2 = sVersion.split(".");
+            }
+            var needUpdate = false;
+            for (var m = 0; m < 4; m++) {
+                if (v2[m] * 1 > v1[m] * 1) {
+                    needUpdate = true;
+                    break;
+                } else if (v2[m] * 1 == v1[m] * 1) {
+                    continue;
+                } else {
+                    needUpdate = false;
+                    break;
+                }
+            }
+            if (needUpdate) {
+                DownPluginTip = function () {
+                    var browserName = navigator.userAgent.toLowerCase();
+                    var obj = document.getElementById("downPlugins");
+                    if (/firefox/i.test(browserName)) {
+                        obj.innerHTML = '<a id="down" href="IPCWebComponents.exe">' + lg.get("IDS_PLUGIN_UPDATE_TIP") + '</a>';
+                    }
+                    else {
+                        //obj.innerHTML = '<a id="down" href="plugins.pkg">' + lg.get("IDS_PLUGIN_UPDATE_TIP") + '</a>';
+                        obj.innerHTML = '<a id="down" href="http://download.foscam.com/plugin-a">' + lg.get("IDS_PLUGIN_UPDATE_TIP") + '</a>';
+                    }
+                }
+            }
+        }
+		
+		var str = "";
+		for (var i = 0; i < 9; i++) {
+			str += ('<div id="ipcamdiv' + i + '" style="float:left;height:0%;width:0%;"><embed width="100%" height="100%" pluginspage="IPCWebComponents.exe" type="application/ipcam-regplugin" id="ipcam" name="' + i + '"></embed></div>')
+		}
+		$("#plugin").html(str);
+    }else if(browserVer.browsers == "Internet Explorer" || isIE11){
+        doEvent = doEvent2;
+        if ($.browser.version == "6.0") {
+            //设计最小值
+            onReSize();
+            document.body.onresize = function () {
+                onReSize(); changPlugin(); try { $("#gsliderCov").trigger("sChange"); } catch (e) {
+                }
+            };
+        } else {
+            document.body.onresize = function () { changPlugin(); try { $("#gsliderCov").trigger("sChange"); } catch (e) { } };
+        }
+    }else if(IsEdge()){
+        wsServiceManager.requestService();
+        isIE = false;
+        doEvent = doEvent1;
+        ReSize = function () { try { $("#gsliderCov").trigger("sChange"); } catch (e) { } }
+        if(H5Live_Edge){
+            $("#plugin").html('<video name="videoElement" id="videoTag" class="centeredVideo" width="100%" autoplay="autoplay" height="100%"></video><video name="audioElement" id="audioTag" autoplay="autoplay" class="centeredAudio"  style="display:none;"></video><div id="connectErrorTxt"></div><div id="videoSignGreen"></div><div id="videoSignRed"></div>');
+            $("video").bind("contextmenu",function(){//取消video 鼠标右键事件
+                return false;
+            });
+        }else{
+            var prms = {
+                "allowFullScreen": "true",
+                "allowScriptAccess": "sameDomain"
+            };
+            $("#plugin").html('<embed src="plugin/FoscamFlashPlayer.swf" width="100%" height="100%" allowScriptAccess="sameDomain" allowFullScreen="true">');
+            try {
+                gDvr.obj = document.getElementsByTagName("embed");
+                isplugin = true;
+            } catch (e) {
+                isplugin = false;
+            }
+        }
+    }else{
+        //if(browserPlatform != "macintel")
+        wsServiceManager.requestService();
+			
+        isIE = false;
+        doEvent = doEvent1;
+        ReSize = function () { try { $("#gsliderCov").trigger("sChange"); } catch (e) { } }
+        checkPlugin();
+    }
+    window.onbeforeunload = function (e) {
+        Logout();
+        if(browserVer.browsers == "Internet Explorer" || IsIE11()){
+            for(var i=0;i<9;i++){
+                try{
+                    gDvr.CloseIETab(i);
+                }catch(e){}
+            }
+        }else if(IsFirefox() || IsEdge() || IsChromeSupportNacl() || (browserVer.browsers == "Safari" && H5Live_Safari)){
+            gDvr.closeWebSocketProcess();
+        }
+    }
+    WebInit(DownPluginTip, isIE);
+});
+</script>
+<link href="./IPCam Client_files/main1.css" rel="stylesheet" type="text/css">
+<link href="./IPCam Client_files/login.css" rel="stylesheet" type="text/css"></head>
+<body onselectstart="return fbd();" onresize="ReSize()">
+<iframe onload="" id="cgiframe" style="display:none" src="./IPCam Client_files/saved_resource.html"></iframe>
+<iframe onload="" id="cgiframe1" style="display:none" src="./IPCam Client_files/saved_resource(1).html"></iframe>
+<div id="MsgPaop">
+    <div id="PaopBg" style="height:28px; width:240px; background:url(images/paopaotitie.gif)">
+        <div id="Paoptitle"></div><div class="paopao_close"></div>
+    </div>
+    <div id="PaopContant" style="height:145px;font-family:&#39;Times New Roman&#39;, Times, serif;width:240px;white-space:normal;word-break:break-all; background:#FFF;"></div>
+</div>
+<div id="MsgPaop1">
+    <div id="PaopBg1" style="height:28px; width:240px; background:url(images/paopaotitie.gif)">
+        <div id="Paoptitle1"></div><div class="paopao_close1"></div>
+    </div>
+    <div id="PaopContant1" style="height:145px; width:240px;white-space:normal;word-break:break-all; background:#FFF;"></div>
+</div>
+<div type="hidden" name="hdvalue" id="hdvalue" style="display:none;"></div>
+<div id="MaskLayout" style="width: 1000px; height: 864px; display: none;"></div>
+<div id="VideoMaskLayout" style="display:none;">
+	<div id="textInVideoMask" style="color:white; margin-top:0px;text-decoration:underline;cursor:pointer;">The browser does not support H264+ video encoding. Please use IE browser or click here to switch to H264 encoding.</div>
+</div>
+
+
+<script>MasklayerShow();</script>
+
+<div id="header" class="header" style="background: url(&quot;images/con-logo-bg.png&quot;); font-family: Arial;" headerstate="">
+    <div style=" position:relative;float:left;width:290px;height:78px;background:url(../images/con-logo.png) no-repeat; overflow:hidden;">
+        <div style="float:left;float:left;width:20px; margin-top:63px;height:15px;background:url(images/body-1.gif); overflow:hidden;"></div>
+        <div style="float:left;width:270px; height:15px; margin-top:63px;background:url(images/top-4.jpg); overflow:hidden"></div>
+    </div> 				   
+    <div style="float:left;width:549px; height:78px; position:relative; overflow:hidden;">
+        <div id="liveTemperature" style="float:left; top:15px;position:absolute;"></div>
+        <div id="liveHumidity" style="float:left;top:38px;position:absolute;"></div>
+        <div id="LiveMenu" style=" text-align:left; line-height: 50px;font-size:15px; color:#000;text-indent:5px;text-indent:5px\0;float:left;width:139px; height:49px;top:20px;left:100px;position:absolute;background:url(images/button-2.gif) 0px 0px no-repeat; z-index:30;cursor:pointer;padding-left:35px;">Live Video
+	        <div id="LiveMenu_2" class="bc1"></div>
+        </div>
+    
+        
+    
+        <div id="ConfigMenu" style="line-height:50px; text-indent:5px;font-size:15px; color:#000;z-index:28;float:left;text-indent:5px\0;width:149px; height:49px;top:20px;left:235px;position:absolute;background: url(images/button-2.gif) -179px 0px no-repeat;overflow:hidden;cursor:pointer;padding-left:30px;">Settings
+	        <div id="ConfigMenu_2" class="bc3"></div>
+        </div>
+        <div style="height:15px;background:url(images/top4.jpg); position:absolute; width:549px; bottom:0; overflow:hidden;"></div> 
+    </div>
+    
+    
+    <div style="height:78px; width:100%; margin-left:-839px; overflow:hidden;float:left;">
+    	<div id="LogoutMenu" style="display:none;" title="Logout"></div>
+    	<div>
+    	    <label style="float:right;margin-top:22px;margin-right:30px;font-size:30px;color:#606a73;text-shadow:d1;font-family:Arial;font-weight:bolder;" id="labConTitle">Indoor IP Camera</label>
+    	</div>
+		<div style=" height:15px;background:url(images/top4.jpg); margin-top:63px; margin-right:16px;"></div>  
+		<div style="width:16px; height:15px;background:url(images/body-2.gif); float:right; margin-top:-15px;_margin-top:-19px;"></div>
+    </div>
+     
+    <!--<div style="height:78px;width:100%;position:absolute;left:839px;top:0px;">
+        <div id="LogoutMenu" style="display:none;"></div>
+        <div style="height:63px;width:100%;">Indoor Pan/Tilt IP Camera</div>
+		<div style=" height:15px;width:100%;background:url(images/top4.jpg);position:absolute;top:63px;right:16px;">2222222222</div>  
+		<div style="width:16px; height:15px;background:url(images/body-2.gif); float:right; margin-top:-15px;_margin-top:-19px;">3333333333333</div>
+    </div>-->
+    <!--<table style="height:78px;width:100%;position:relative;margin-left:1px;" cellpadding="0" cellspacing="0" border="1">
+        <tr style="width:100%;" height="63px">
+            <td style="border:solid 2px #000000;">
+                <div id="LogoutMenu" style="display:none;"></div>
+                <div style="height:63px;width:100%;">Indoor Pan/Tilt IP Camera</div>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="height:15px;background:url(images/body-2.gif);"></td>
+        </tr>
+    </table>-->
+    
+    <!--<div style="height:78px; width:100%; margin-left:-839px; overflow:hidden;float:left;">
+    	<div id="LogoutMenu" style="float:right;width:47px;height:68px;margin-right:36px;background:url() no-repeat 0px 30px;" onmouseover="this.style.backgroundImage=''" onmouseout="this.style.backgroundImage=''"></div>
+		<div style=" height:15px;background:url(images/top4.jpg); margin-top:63px; margin-right:16px;"></div>  
+		<div style="width:16px; height:15px;background:url(images/body-2.gif); float:right; margin-top:-15px;_margin-top:-19px;"></div>
+    </div>-->
+</div>
+<div id="content" class="content">
+    <div id="mleft" class="mleft" style="background: url(images/top-5.jpg)" name="isDown"><div style="height:100%; width:226px; overflow:hidden; margin-left:24px">
+<div id="left" style="width:750px; height:100%; overflow:hidden; margin-left:-24px">
+	<div id="liveleft" style="overflow-y:auto;">
+	    <div style="margin-left:8px;width:250px; margin-top:0px;">
+            <table style="width:220px;margin-left:14px;font-size:14px;color:#000;text-align:left;line-height:22px;font-family:Arial;">
+                <!--  多路画面   -->
+                <tbody>
+                <!--  电源频率   -->
+                <tr id="left_powfre">
+                    <td width="75" id="powerfreq">Mode</td>
+                    <td>
+                        <div style="float:left;margin:0px 4px 0px 0px;">
+                            <select id="live_pf" style="width:138px;">
+								<option value="1">50Hz</option>
+                                <option value="0">60Hz</option>
+                                <option id="opLivePf" value="2">Outdoor Mode</option>                       
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <!--  视频流选择   -->
+                <tr id="livespltr">
+                    <td id="LeftStrType">Stream</td>
+                    <td>
+                        <div style="float:left;margin:5px 4px 0px 0px;">
+                            <select id="live_spl" style="width:138px;font-family: arial;"><option value="0">HD Mode/ 720P/ 25fps/ 2M</option><option value="1">Equilibrium Mode/ 720P/ 15fps/ 1M</option><option value="2">Smooth Mode/ 720P/ 15fps/ 512K</option><option value="3">User-defined/ 720P/ 30fps/ 2M</option></select>
+                        </div>
+                    </td>
+                </tr>
+                <!--  HDR   -->
+                <tr id="liveHDR" style="display:none;">
+                    <td id="liveHDRType">HDR</td>
+                    <td>
+                        <div style="float:left;margin:5px 4px 0px 0px;">
+                            <select id="live_HDR" style="width:138px;font-family: arial;">
+								<option value="0">Off</option>
+                                <option value="1">On</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="liveVideoWDR" style="display:none;">
+                    <td id="wdrType">WDR</td>
+                    <td>
+                        <div style="float:left;margin:5px 4px 0px 0px;">
+                            <select id="liveVideo_WDR" style="width:138px;font-family: arial;">
+								<option value="0">Off</option>
+                                <option value="1">On</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <!--网络自适应-->
+                 <tr id="liveNAA" style="">
+                    <td id="NAAType" style="padding:5px 0 0;">NAA</td>
+                    <td>
+                        <div style="float:left;margin:5px 4px 0px 0px;">
+                            <select id="liveVideo_NAA" style="width:138px;font-family: arial;">
+                                <option value="0">Off</option>
+                                <option value="1">On</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <!--  镜像和翻转   -->
+                <tr align="center" id="left_jxfz">
+                	<td colspan="2">
+                	    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:3px;">
+                	        <tbody><tr>
+                	            <td width="50%" style="text-align:left;">
+                	                <input type="checkbox" id="live_jx" style="margin-left:10px;">
+		            	            <label id="lab_live_jx">Mirror</label>
+                	            </td>
+                	            <td width="50%" style="text-align:left;">
+                	                <input type="checkbox" id="live_fz">
+						            <label id="lab_live_fz">Flip</label>
+                	            </td>
+                	        </tr>
+                	    </tbody></table>
+					</td>
+                </tr> 
+                  <!--  zoom功能   -->
+                  <tr align="center" id="left_zoom">
+                	<td colspan="2">
+                		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+                		    <tbody><tr>
+                		        <td width="50%" style="text-align:left;">
+                		            <div id="zoomIn" style="float: left; width: 20px; height: 20px; background: url(&quot;../images/zoomin.png&quot;); margin-left: 10px; display: none;" title="Zoom in"></div>
+                		            <label id="lab_zoomIn" style="margin-left: 5px; display: none;">Zoom in</label>
+                		        </td>
+                		        <td width="50%" style="text-align:left;">
+                		            <div id="zoomOut" style="float: left; width: 20px; height: 20px; background: url(&quot;../images/zoomout.png&quot;); display: none;" title="Zoom out"></div>
+                                    <label id="lab_zoomOut" style="margin-left: 5px; display: none;">Zoom out</label>
+                		        </td>
+                		    </tr>
+                		    <tr>
+                		        <td width="50%" style="text-align:left;">
+                		            <div id="focus_far" style="float: left; width: 20px; height: 20px; background: url(&quot;../images/zoomin.png&quot;); margin-left: 10px; display: none;" title="focus"></div>
+                		            <label id="lab_focusFar" style="margin-left: 5px; display: none;">focus</label>
+                		        </td>
+                		        <td width="50%" style="text-align:left;">
+                		            <div id="focus_near" style="float: left; width: 20px; height: 20px; background: url(&quot;../images/zoomout.png&quot;); display: none;" title="focus"></div>
+                                    <label id="lab_focusNear" style="margin-left: 5px; display: none;">focus</label>
+                		        </td>
+                		    </tr>
+                		</tbody></table>
+					</td>
+                </tr>  
+
+
+            </tbody></table> 
+        </div>
+	
+	    <div style="width:250px; height:2px;overflow:hidden;background:url(../images/line.jpg)"></div> 
+	    
+	    <!--  云台   -->
+    	<div id="leftptz" style="margin-left: 50px; height: 163px; width: 164px; overflow: hidden; background: url(&quot;images/yt.png&quot;) no-repeat; position: relative; margin-top: 5px; display: none;">
+        	<div id="live_yt1_ptzMoveUp" tag="0" style="background:url(images/fxp_r2_c5a.gif) no-repeat; width:22px; height:12px; position:absolute; left: 70px; top: 23px;" name=""></div>
+            <div id="live_yt2_ptzMoveTopLeft" tag="91" style="background:url(images/fxp_r3_c3.gif) no-repeat; width:13px; height:12px; position:absolute; left: 42px; top: 42px;" name=""></div>
+            <div id="live_yt2_ptzMoveTopRight" tag="90" style="background:url(images/fxp_r3_c7.gif) no-repeat; width:13px;height:12px;  position:absolute; left: 110px; top: 42px;" name=""></div>
+            <div id="live_yt5_ptzMoveLeft" tag="6" style="background:url(images/fxp_r5_c2.gif) no-repeat; width:12px; height:22px; position:absolute; left: 23px; top: 70px;" name=""></div>
+ 			<div id="live_fw" cmd="ptzReset" style="background:url(images/fxp_r5_c5.png) no-repeat; width:55px; height:55px; position:absolute; left: 54px; top: 55px;" title="Center" name=""></div>
+            <div id="live_yt5_ptzMoveRight" tag="4" style="background:url(images/fxp_r5_c8.gif) no-repeat; width:12px;height:22px;  position:absolute; left: 128px; top: 70px;" name=""></div>
+            <div id="live_yt5_ptzMoveBottomLeft" tag="93" style="background:url(images/fxp_r7_c3.gif) no-repeat; width:12px; height:13px; position:absolute; left: 42px; top: 110px;" name=""></div>
+            <div id="live_yt2_ptzMoveBottomRight" tag="92" style="background:url(images/fxp_r7_c7.gif) no-repeat; width:13px;height:12px;  position:absolute; left: 110px; top: 110px;" name=""></div>
+            <div id="live_yt1_ptzMoveDown" tag="2" style="background:url(images/fxp_r8_c5.gif) no-repeat; width:22px; height:12px; position:absolute; left: 70px; top: 129px;" name=""></div>
+        </div>
+        
+        
+        <div style="width:250px; height:2px;overflow:hidden;background:url(../images/line.jpg);margin-top:5px;"></div> 	
+        
+        
+        
+        <div id="pllive2" style="font-family:Arial;">	
+            <div style="margin-left:40px;width:191px; height:200px; +height:260px;margin-top:5px;">
+                <div id="cruise_1" style="font-size: 14px; text-align: center; line-height: 27px; width: 191px; height: 25px; overflow: hidden; background: url(&quot;images/button9.gif&quot;) no-repeat; display: none;" name="" isdown="1">Cruise</div>
+                <div id="m_1" style="width: 210px; height: 68px; font-size: 13px; margin-top: 10px; display: none;">
+                    <div id="cruise_path" style="float:left;line-height:27px; width:65px; text-indent:10px;">Track</div>
+                    <div style=" width:125px; height:25px;overflow:hidden; float:left;">
+                        <div><select id="cruise" style="width:100px;"><option class="option" value="0">Vertical</option><option class="option" value="1">Horizontal</option></select></div>
+                        <div onmousedown="doEvent(&#39;cruise&#39;,&#39;mousedown&#39;)"></div>
+                    </div>
+       	            <br style="clear:left;">
+       	            <div id="cruise_start" style="float:left;width:24px;margin-top:8px;margin-left:65px; height:21px;overflow:hidden;background:url(../images/expand-113.gif) 0px -21px no-repeat;" name="" title="Start cruise"></div>
+       	            <div id="cruise_stop" style="float:left;width:24px;overflow:hidden; margin-top:8px;margin-left:25px;height:21px;background:url(../images/expand-113.gif) 0px -42px no-repeat;" name="" title="Stop cruise"></div>
+       	        </div>
+                
+                <div id="preset_2" style="margin-top: 2px; text-align: center; line-height: 27px; width: 191px; font-size: 14px; height: 25px; overflow: hidden; background: url(&quot;images/button9.gif&quot;) 0px -25px no-repeat; display: none;" name="" isdown="1">Preset</div>
+                <div id="m_2" style="width: 210px; height: 68px; font-size: 13px; margin-top: 10px; display: none;">
+                    <div id="preSetNameT"><div id="pre_pos" style="float:left;line-height:27px; padding-right:5px; text-indent:10px;">Preset</div>
+                        <div style=" width:125px; height:25px;overflow:hidden; float:left;">
+                            <div>
+                                <select id="preset" style="width:100px;"><option class="option" value="TopMost">TopMost</option><option class="option" value="BottomMost">BottomMost</option><option class="option" value="LeftMost">LeftMost</option><option class="option" value="RightMost">RightMost</option></select>
+                            </div>
+                            <div onmousedown="doEvent(&#39;preset&#39;,&#39;mousedown&#39;)"></div>
+                        </div>
+                        <br style="clear:left;">
+                        <div id="pre_add" style="float:left;width:24px;overflow:hidden;margin-top:8px;margin-left:35px; height:21px;background:url(../images/expand-113.gif) 0px -126px no-repeat;" name="" title="Add preset point"></div>
+                        <div id="pre_sub" style="float:left;width:24px; overflow:hidden;margin-top:8px;margin-left:25px;height:21px;background:url(../images/expand-113.gif) 0px 0px no-repeat;" name="" title="Delete the preset point"></div>
+                        <div id="pre_goto" style="float:left;width:24px;overflow:hidden; margin-top:8px;margin-left:25px;height:21px;background:url(../images/expand-113.gif) 0px -63px no-repeat;" name="" title="Goto the preset point"></div>
+                    </div>
+                    <div id="preSetName" style="display:none;"><div id="leftname" style="float:left;line-height:27px; width:65px; text-indent:28px;">Name</div>
+                        <div style="height:25px;">
+                            <input style="width:90px;height:18px;overflow:hidden;" type="text" id="preSetNameTe">
+                        </div>
+                        <!--<br style="clear:left;" />-->
+                        <div style="clear:left;margin-top:10px;"></div>
+                        <div id="preSetNameS" style="float:left;width:24px;margin-left:35px;overflow:hidden; height:21px;background:url(../images/expand-113.gif) 0px -105px no-repeat;" name="" title="OK"></div>
+                        <div id="preSetNameQ" style="float:left;width:24px;height:21px;margin-left:74px;overflow:hidden;background:url(../images/expand-113.gif) 0px -84px no-repeat;" name="" title="Cancel"></div>
+                    </div>
+                </div>
+                <!-- 看守位 -->
+                <div id="guard_6" style="display:none; margin-top:2px;text-indent:40px 25px; text-align:center;line-height:27px;width:191px;font-size:14px; height:25px;overflow:hidden; background:url(images/button9.gif) 0px -25px no-repeat" name="" isdown="1">Guard position</div>
+                <div id="m_6" style="display:none; width:210px; height:40px;font-size:13px; margin-top:10px;">
+                    <div style="height:25px; margin-left:30px; overflow:hidden;float:left;">
+                         <select id="guardSetPostion" style="width:138px;"><option class="option" value="TopMost">TopMost</option><option class="option" value="BottomMost">BottomMost</option><option class="option" value="LeftMost">LeftMost</option><option class="option" value="RightMost">RightMost</option></select>
+                    </div>
+                </div>
+
+                <div id="LED_3" style="margin-top:2px;text-indent:40px 25px; text-align:center;line-height:27px;width:191px; height:25px; overflow:hidden;font-size:14px;background:url(images/button9.gif) 0px -50px no-repeat;" name="" isdown="1">IR LED Lights</div>
+                <div id="m_3" style="width: 210px; height: 68px; font-size: 13px; margin-top: 10px; display: none;">
+                    <div id="BsHwdCtSt" style="float:left;line-height:27px; width:65px; text-indent:10px;margin-top:10px;">Mode</div>
+                    <div style=" width:125px; height:25px; overflow:hidden;float:left;margin-top:10px;">
+                        <div>
+                            <select id="BsHmode">
+                                <option id="BsHwdAuto" value="0">Auto</option>
+                                <option id="BsHwdManual" value="1">Manual</option>
+                                <option id="BsHwdSchedule" value="2">Schedule</option>
+                                <!--<option id="BsHwdClose" value="2"></option>-->
+                            </select>
+                        </div>
+                        <div onmousedown="doEvent(&#39;BsHmode&#39;,&#39;mousedown&#39;)"></div>
+                    </div>
+                    <br style="clear:left;">
+                    <div id="BsHwdManualSetting" style="text-align: center; display: none;">
+                        <input type="radio" id="irOn" name="irCtrl"><label id="lab_irOn">On</label>&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="irOff" name="irCtrl"><label id="lab_irOff">Off</label>
+                    </div>
+                </div>
+                
+                <div id="colar_4" style="margin-top:2px;text-indent:40px 25px; text-align:center;line-height:27px;width:191px; font-size:14px;height:25px;overflow:hidden; background:url(images/button9.gif) 0px -75px no-repeat" name="" isdown="1">Color Adjustment</div>
+                <div id="m_4" style="width: 210px; height: 125px; margin-top: 5px; display: none;">
+                    <div id="QX_Operator1" style="width:180px; height:100px;_height:110px; margin:0px 0px 0px 0px;">
+                        <div id="live_wd_sj1" class="lf1" style="background-position:0px 0px" title="Hue"></div>
+                        <div class="lf2">
+        	                <div id="clordiv_1" class="lf4" flag="hue" cmd="setHue" speed="50">
+        		                <div id="clordir_1" class="lf5" style="width: 50%;"></div>
+        	                </div>
+        	                <div id="clorbtn_1" class="lf6" style="margin-left: 50px;"></div>
+                        </div> 
+                        <div id="live_wd_sj" class="lf7">50</div>
+                        <div id="live_wd_ld1" class="lf1" style="background-position:-14px 0px" title="Brightness"></div>
+                        <div class="lf2">
+        	                 <div id="clordiv_2" class="lf4" flag="brightness" cmd="setBrightness" speed="60">
+        		                <div id="clordir_2" class="lf5" style="width: 60%;"></div>
+        	                </div>
+        	                <div id="clorbtn_2" class="lf6" style="margin-left: 60px;"></div>
+                        </div> 
+                        <div id="live_wd_ld" class="lf7">60</div>
+                        <div id="live_wd_dbd1" class="lf1" style="background-position:-28px 0px" title="Contrast"></div>
+                        <div class="lf2">
+        	                <div id="clordiv_3" class="lf4" flag="constrast" cmd="setContrast" speed="48">
+        		                <div id="clordir_3" class="lf5" style="width: 48%;"></div>
+        	                </div>
+        	                <div id="clorbtn_3" class="lf6" style="margin-left: 48px;"></div>
+                        </div> 
+                        <div id="live_wd_dbd" class="lf7">48</div>
+                        <div id="live_wd_bhd1" class="lf1" style="background-position:-42px 0px" title="Saturation"></div>
+                        <div class="lf2">
+        	                <div id="clordiv_4" class="lf4" flag="saturation" cmd="setSaturation" speed="56">
+        		                <div id="clordir_4" class="lf5" style="width: 56%;"></div>
+        	                </div>
+        	                <div id="clorbtn_4" class="lf6" style="margin-left: 56px;"></div>
+                        </div> 
+                        <div id="live_wd_bhd" class="lf7">56</div>
+                        <div id="live_wd_rd1" class="lf1" style="background-position:-56px 0px" title="Sharpness"></div>
+                        <div class="lf2">
+        	                <div id="clordiv_5" class="lf4" flag="sharpness" cmd="setSharpness" speed="48">
+        		                <div id="clordir_5" class="lf5" style="width: 48%;"></div>
+        	                </div>
+        	                <div id="clorbtn_5" class="lf6" style="margin-left: 48px;"></div>
+                        </div> 
+                        <div id="live_wd_rd" class="lf7">48</div>
+                    </div>
+                    <div id="QX_Operator2" style=" margin-left:35px;font-size:13px;width:117px;"><div id="color_default" class="button" style="text-align:center;line-height:21px;" name="">Default</div></div>  
+                </div>
+                <div id="Lullabies" style="display:none;">
+                    <div id="music_5" style="margin-top:2px;text-indent:40px 25px; text-align:center;line-height:27px;width:191px; font-size:14px;height:25px;overflow:hidden; background:url(images/button9.gif) 0px -75px no-repeat" name="" isdown="1">Lullabies</div>
+                    <div id="m_5" style="width:250px; height:65px;margin-top:10px;font-size:13px; display:none;">
+                
+                        <div style="width:100%;height:25px;">
+                            <div id="music_prev" style="margin-left:0px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -42px;background-repeat:no-repeat;" name="" title="Prevous One"></div>
+                            <div id="music_play" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px 0px;background-repeat:no-repeat;" name="" title="Play"></div>
+                            <div id="music_pause" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -21px;background-repeat:no-repeat;display:none;" name="" title="Pause"></div>
+                            <div id="music_stop" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -21px;background-repeat:no-repeat;display:none;" name="" title="Stop"></div>
+                            <div id="music_next" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -63px;background-repeat:no-repeat;" name="" title="Next One"></div>
+
+                            <div id="music_singlerepeat" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -126px;background-repeat:no-repeat;" name="" title="Order Of Play"></div>
+                            <div id="music_allrepeat" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -84px;background-repeat:no-repeat;display:none;" name="" title="Repeat"></div>
+                            <div id="music_playlist" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-music.png);background-position:0px -105px;background-repeat:no-repeat;display:none;" name="" title="All Cycle"></div>
+                            <div id="music_10" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-sleep.png);background-position:0px -63px;background-repeat:no-repeat;" name="" title="Continuous play"></div>
+                            <div id="music_20" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-sleep.png);background-position:0px 0px;background-repeat:no-repeat;display:none;" name="" title="Stop in 10 minutes"></div>
+                            <div id="music_30" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-sleep.png);background-position:0px -21px;background-repeat:no-repeat;display:none;" name="" title="Stop in 20 minutes"></div>
+                            <div id="music_100" style="margin-left:18px;margin-top:10px;float:left;width:24px;height:21px;background-image:url(images/btn-sleep.png);background-position:0px -42px;background-repeat:no-repeat;display:none;" title="Stop in 30 minutes"></div>
+                        </div>
+                        <br>
+                        <div style="height:25px;">
+                            <div id="music_list_title" style="float:left;line-height:25px;width:55px;margin-bottom:0px;">Lullabies List</div>
+                            <div style="overflow:hidden;float:left;margin-bottom:0px;">
+                                <select id="sel_music_list" style="width:100px;height:19px;margin-top:2px;"></select>
+                            </div>
+                            <div id="divReloadMusic" style=" display:none; width:23px;height:19px;float:left;margin-left:10px;margin-bottom:0px;margin-top:2px;background:url(../images/reload.png)" title="Reload" name=""></div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div id="pllive" name="pllive" style="position:absolute; top:0px; left:0px; width:250px; height:620px; display:none;"></div>
+    </div>
+    
+    
+    <div id="configleft" style="font-family:arial;" divstate="">
+        <div style="clear:right;float:right;height:100%;width:4px;background:url(../images/cb2.gif); overflow: hidden; margin-top:-30px;">
+    	    <div style="height:3px; width:4px; overflow:hidden; background:url(../images/cb4.gif); margin-top:30px"></div>
+        </div>
+        <div style="clear:left;float:left;height:100%;width:246px;">
+    	    <div id="configMl" style="height:100%; margin-left:20px;">
+				<div style="height:15px;"></div>
+                <div class="configHead" id="cfgmune_12">Setup Wizard<div class="configDiv" style="width:18px;"></div></div>
+                <div style="display:none;" id="cfgpanel_12">
+                    <div id="set_guid" class="notselected">Setup Wizard</div>
+                </div>
+                <div class="configHead" id="cfgmune_1">Status<div class="configDiv" style="width:18px;"></div></div>	
+                <div style="" id="cfgpanel_1" class="configpanel">
+                    <div id="dev_info" class="notselected">Device Information</div>
+                    <div id="dev_state" class="notselected">Device Status</div>
+                    <div id="dev_ses" class="notselected">Session Status</div>
+                    <div id="dev_log" class="notselected">Log</div>
+                </div>
+                <div class="configHead" id="cfgmune_2">Basic Settings<div class="configDiv" style="width:18px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_2">
+                    <div id="bs_base" class="notselected">Camera Name</div>
+                    <div id="bs_time" class="notselected">Camera Time</div>
+                    <div id="usr_base" class="notselected">User Accounts</div>
+                    
+                    <div id="bs_led" class="notselected">Status Light</div>
+                    
+                   <div id="bs_voice" class="notselected">Voice Prompt</div>
+                   <div id="bs_country" class="notselected" style="display:none;"></div>
+                </div>
+                <div class="configHead" id="cfgmune_3">Network<div class="configDiv" style="width:19px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_3">
+                    <div id="net_ip" class="notselected">IP Configuration</div>
+                    <div id="net_wifi" class="notselected">Wireless Settings</div>
+                    <div id="net_softAP" class="notselected">Soft AP Password Settings</div>
+                    
+                    <div id="net_ddns" class="notselected">DDNS</div>
+                    <div id="net_upnp" class="notselected">UPnP</div>
+                    <div id="net_port" class="notselected">Port</div>
+                    <div id="bs_email" class="notselected">Mail Settings</div>
+                    <div id="path_ftp" class="notselected">FTP Settings</div>
+					<div id="net_p2p" class="notselected">P2P</div>
+					
+					
+                    <div id="net_onvif" class="notselected">Onvif</div>
+                </div>
+                <div class="configHead" id="cfgmune_5">Video<div class="configDiv" style="width:23px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_5">
+                    <div id="av_base" class="notselected">Video Settings</div>
+                    <div id="av_osd" class="notselected">On Screen Display</div>
+                    
+                    <div id="av_captur" class="notselected">Snapshot Settings</div>
+                    <div id="av_irled" class="notselected">IR LED Schedule</div>
+                    
+                </div>
+                <div class="configHead" id="cfgmune_4">Detector<div class="configDiv" style="width:25px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_4">
+                    
+                    <div id="alarm_mv" class="notselected" style="display: none;">Motion Detection</div>
+                    <div id="alarm_motion" class="notselected">Action Detection</div>
+                    <div id="alarm_sud" class="notselected">Sound Detection</div>
+                    
+                    <div id="alarm_temperature" class="notselected" style="display: none;">Temperature Detection</div>
+                    <div id="alarm_humidity" class="notselected" style="display: none;">Humidity Detection</div>
+                    <div id="alarm_IV" class="notselected" style="display: none;">Human Detection</div>
+                </div>
+                
+                <div class="configHead" id="cfgmune_6">Record<div class="configDiv" style="width:24px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_6">
+                    <div id="rc_path" class="notselected">Storage Location</div>
+                    <div id="rc_jh" class="notselected" style="display:none;">Scheduled recording</div>
+                    <div id="rc_alarm" class="notselected">Alarm Recording</div>
+                    <div id="rc_localalarm" class="notselected">Local Alarm Recording</div>
+                    <div id="rc_plan" class="notselected">Scheduled Recording</div>
+                    <div id="rc_sdmanage" class="notselected">SD Card Management</div>
+                </div>
+                
+                
+                
+
+                <div class="configHead" id="cfgmune_7" style="display: none;">PTZ<div class="configDiv" style="width:24px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_7">
+                    <div id="ptz_rate" class="notselected">Pan &amp; Tilt Speed</div>
+                    <div id="ptz_ctrack" class="notselected">Cruise Settings</div>
+                    <div id="ptz_initcof" class="notselected">Start-Up Options</div>
+                    
+					<div id="ptz_485" class="notselected" style="display:none;">RS485 Configuration</div>
+                </div>
+                <div class="configHead" id="cfgmune_8" style="display:none;">Path setting<div class="configDiv" style="width:19px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_8">
+                    <div id="path_ftp" class="notselected"></div>
+                    <div id="path_gx" class="notselected" style="display:none;">Shared Directory</div>
+                </div>
+                <div class="configHead" id="cfgmune_9">Firewall<div class="configDiv" style="width:16px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_9">
+                    <div id="fw_ip" class="notselected">IP Filtering</div>
+                </div>
+                
+                <div class="configHead" id="cfgmune_10">System<div class="configDiv" style="width:25px;"></div></div>	
+                <div style="display:none;" id="cfgpanel_10">
+                    <div id="sys_dr" class="notselected">Back-up &amp; Restore </div>
+                    <div id="sys_updata" class="notselected">System Upgrade</div>
+                    <div id="sys_patch" class="notselected">Patch Installation</div>
+                    <div id="sys_hf" class="notselected">Factory Reset</div>
+                    <div id="sys_cq" class="notselected">Reboot</div>
+                </div>
+            </div>
+        </div>
+    </div>
+      
+        
+    <div id="playbackleft" style="font-family: arial; overflow-y: auto; display: none;">
+    	<div style="margin-left:20px;">
+    	    <div id="CalDayID" name=""></div>
+		    <!--存储月搜索数据-->
+            <input type="text" id="calday" style="display:none;" maxlength="10" readonly="true">
+            <div id="calendar" class="calendarDiv"><table class="datepicker" cellpadding="0" cellspacing="0" style="position: absolute; left: 0px; top: 5px;"><thead><tr class="controls"><th><div class="prevMonth" style="cursor: default;"></div></th><th></th><th></th><th></th><th></th><th colspan="7" style="text-align:left; height: 30px;"><div class="yearselect" style="cursor: default;"><select class="selyear" name="year"><option>1970</option><option>1971</option><option>1972</option><option>1973</option><option>1974</option><option>1975</option><option>1976</option><option>1977</option><option>1978</option><option>1979</option><option>1980</option><option>1981</option><option>1982</option><option>1983</option><option>1984</option><option>1985</option><option>1986</option><option>1987</option><option>1988</option><option>1989</option><option>1990</option><option>1991</option><option>1992</option><option>1993</option><option>1994</option><option>1995</option><option>1996</option><option>1997</option><option>1998</option><option>1999</option><option>2000</option><option>2001</option><option>2002</option><option>2003</option><option>2004</option><option>2005</option><option>2006</option><option>2007</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option><option>2018</option><option>2019</option><option>2020</option><option>2021</option><option>2022</option></select></div><div style="float: left; text-align: left; cursor: default;">&nbsp;.&nbsp;</div><div class="selectMonth" style="cursor: default;"><select class="selmonth" name="month"><option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option><option value="4">5</option><option value="5">6</option><option value="6">7</option><option value="7">8</option><option value="8">9</option><option value="9">10</option><option value="10">11</option><option value="11">12</option></select></div></th><th><div class="nextMonth" style="cursor: default;"></div></th></tr><tr class="days"><th></th><th></th><th></th><th></th><th></th><th></th><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr></thead><tfoot></tfoot><tbody class="tbody"><tr><th class="CALMAXDAY" colspan="6" rowspan="7"><div class="ToData" style="cursor: default;">20</div><div class="ToDayS" style="cursor: default;">Tuesday</div><div style="position: absolute; top: 135px; left: 8px; cursor: default;"><span class="ToDay">2025-5-20</span></div></th><td></td><td></td><td class="date">1</td><td class="date">2</td><td class="date">3</td><td class="date">4</td><td class="date">5</td></tr><tr><td class="date">6</td><td class="date">7</td><td class="date">8</td><td class="date">9</td><td class="date">10</td><td class="date">11</td><td class="date">12</td></tr><tr><td class="date">13</td><td class="date">14</td><td class="date">15</td><td class="date">16</td><td class="date">17</td><td class="date">18</td><td class="date">19</td></tr><tr><td class="date">20</td><td class="date">21</td><td class="date">22</td><td class="date">23</td><td class="date">24</td><td class="date">25</td><td class="date">26</td></tr><tr><td class="date">27</td><td class="date">28</td><td class="date">29</td><td class="date">30</td><td class="date">31</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+            <div style="background:#9ea29e; width:208px; height:110px;">
+              <div id="sRTime" style="text-align:left;font-size:12px;margin-left:10px;margin-top:5px">
+                        <div style="float:left;text-indent:-5px;"><label id="rTime_from">From</label>&nbsp;&nbsp;&nbsp;</div><div style="overflow:hidden;width:24px;float:left"><select id="rTime_SHour" style="width:43px;font-size:12px"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select></div><div style="float:left"><label>:</label></div><div style="overflow:hidden;width:24px;float:left"><select id="rTime_SMinute" style="width:43px;font-size:12px"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select></div><div style="float:left;text-indent:-8px;">&nbsp;&nbsp;&nbsp;<label id="rTime_to">To</label>&nbsp;&nbsp;&nbsp;</div><div style="overflow:hidden;width:24px;float:left"><select id="rTime_EHour" style="width:43px;font-size:12px"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select></div><div style="float:left"><label>:</label></div><div style="overflow:hidden;width:24px;float:left"><select id="rTime_EMinute" style="width:43px;font-size:12px"><option value="0">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option><option value="32">32</option><option value="33">33</option><option value="34">34</option><option value="35">35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47">47</option><option value="48">48</option><option value="49">49</option><option value="50">50</option><option value="51">51</option><option value="52">52</option><option value="53">53</option><option value="54">54</option><option value="55">55</option><option value="56">56</option><option value="57">57</option><option value="58">58</option><option value="59">59</option></select></div>
+                    </div>
+                <div id="leftpat" style="float:left;line-height:20px; width:65px; text-indent:5px;font-size:12px;margin-top:10px;">Directory</div>
+                <div style=" width:125px; height:25px; overflow:hidden; float:left;margin-top:10px;">
+                    <div>
+                        <select id="leftrepath" style="width:90px;">
+                            <option value="0">SD card</option><!--<option value="1"></option>-->
+                        </select>
+                    </div>
+                    <div onmousedown="doEvent(&#39;leftrepath&#39;,&#39;mousedown&#39;)"></div>
+                </div>
+                <br style="clear:left;">
+               <div id="lefttim" style="float:left;line-height:20px; width:65px; text-indent:10px;font-size:12px;display:none">Time</div>       <div style="height:25px; overflow:hidden; float:left;display:none">
+                    <div>
+                        <select id="leftretime" style="width:90px;">
+                            <option value="0">All Time</option>
+                            <option value="1">Current day</option>
+                            <option value="2">Current month</option>
+                        </select>
+                    </div>
+                    <div onmousedown="doEvent(&#39;leftretime&#39;,&#39;mousedown&#39;)"></div>
+                </div>
+               
+                <div id="recordtype" style="float:left;line-height:20px; width:65px; text-indent:10px;font-size:12px;">Type</div>
+                <div style="height:25px; overflow:hidden; float:left;">
+                    <div>
+                        <select id="pbRcType" style="width:90px;">
+                            <option value="2" id="all_record" selected="selected">All record</option>
+                            <option value="1" id="common_record">Alarm Recording</option>
+                            <option value="0" id="plan_record">Scheduled recording</option>
+                        </select>
+                    </div>
+                    <div style="margin-left:70px" onmousedown="doEvent(&#39;pbRcType&#39;,&#39;mousedown&#39;)"></div>
+                </div>
+                <div style="width:50px; height:19px;  overflow:hidden;float:left;margin-left:2px;margin-top:2px;">
+                <div id="RcSearch" style=" width:23px; height:19px;float:left;background:url(../images/serch.gif)" title="Search" name=""></div> 
+                <div id="RcReload" style=" width:23px; height:19px;float:left;margin-left:2px;background:url(../images/reload.png)" title="Reload" name=""></div>
+                </div>
+
+                <br style="clear:left;">
+                <div id="continPlay" style="float:left;line-height:20px; width:165px; text-indent:10px;font-size:12px;">Continuous Play</div>
+                <div style="height:25px; overflow:hidden; float:left;">
+                    <input type="checkbox" id="continCheck">
+                </div>
+
+                <div id="serword" style="font-size:14px; color:red; clear:left; text-indent:40px; display:none;">Searching...</div>          
+            </div>
+            <div style="height:255px;">
+                <div style="width:208px; height:7px; overflow:hidden;background:url(../images/2-button_2.jpg)"></div>
+                <div style="width:208px; height:7px; overflow:hidden;background:#525252;"></div>
+                <div style="width:208px; height:11px; overflow:hidden;background:url(../images/background_3.jpg)"></div>
+                
+                <div style="height:232px; clear:left;float:left;margin-top:-10px; width:1px;overflow:hidden; background:#525252"></div>
+                <div style="height:210px; width:205px; float:left; position:relative; border-top:1px solid #525252; border-bottom:1px solid #525252;margin-top:5px;">
+                    <table id="rcListT" listnum="0" width="205px" style=" position:absolute; top:-18px;border-collapse:collapse;text-align:left;text-indent:3px; font-size:11px; line-height:18px; color:#000; display:none; table-layout:fixed;" tpage="0" page="0" isnan="0">
+                    </table>
+                </div>
+                <div style="float:left;height:232px;margin-top:-10px; width:1px;overflow:hidden; background:#525252"></div>
+            </div>
+            <div style="height:50px; width:208px;overflow:hidden; margin-top:-12px;position:relative;background:#525252;">
+           
+                <div style="width:208px; height:11px;overflow:hidden;background:url(../images/background_4.jpg)"></div>
+                <div style="width:208px; height:35px;overflow:hidden;background:#525252;"></div>
+                <div style="width:208px; height:4px;overflow:hidden; background:url(../images/background_5.jpg)"></div>
+                <div id="rcListM" style="color:#000; font-size:11px; position:absolute; top:0px; display:none;">
+                    <div style="float:left; margin-right:10px; line-height:22px;"></div><br>
+                    <div style="float:left; line-height:28px;"></div>
+                </div>
+    	    </div>
+        </div>
+    </div>
+      
+</div>
+</div>
+</div>
+    
+    <div id="main" style="background:#c4c7cc;" class="main">
+    	<div id="objPC" class="objPC">
+        	    <div id="plugin" style="position: absolute; z-index: 100000; width: 98%; height: 100%;"><video name="videoElement" id="videoTag" class="centeredVideo" width="100%" height="100%" preload="none" autoplay="" playsinline="" src="blob:http://192.168.1.50:88/96cb8a32-0cf0-4b83-95a5-56438121b308"></video><video name="audioElement" id="audioTag" class="centeredAudio" style="display:none;" preload="none" autoplay="" playsinline="" src="blob:http://192.168.1.50:88/cb778846-9cf8-4b89-9067-7f6f118ba3d3"></video><div id="connectErrorTxt">connecting...</div><div id="videoSignGreen"></div><div id="videoSignRed"></div></div>
+                <div id="MotionRegion" style="font-size:13px; font-family:Arial; display:none; position:absolute; z-index:100000; background:#a0a5ab; left:732px; top:70px; width:200px; height:482px;">
+                    <div id="Region1" style="margin-top:20px;">
+                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="padding-left:20px; ">
+                        	<tbody><tr>
+                        		<td colspan="2"><div id="RegionText1" style="font-size:14px;"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="2"><input id="MotionEnable1" type="checkbox" style="float: left; margin-top: 4px;"><div id="RegionEnable1" style="float:left;"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td><div id="RegoinSensit1"></div></td>
+                                <td>
+                                    <select id="selQue1" style="width:100px;font-family: arial;">
+								        <option value="4"></option>
+                                        <option value="3"></option>
+                                        <option value="0"></option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                    </select>
+                                </td>
+                        	</tr>
+                        	<tr style="display:none;">
+                        		<td colspan="2"><div id="RegionTiggerArea1"></div></td>
+                        	</tr>
+                        	<tr style="display:none;">
+                               <td colspan="2">
+                                    <div class="lf2">
+        	                            <div id="rfdiv_1" class="lf4">
+        		                            <div id="rfdir_1"></div>
+        	                            </div>
+        	                            <div id="rfbtr_1" class="lf6"></div>
+                                    </div> 
+                                    <div id="selMotion1" class="lf7">0</div>
+                               </td>
+                        	</tr>
+                        </tbody></table>
+                        <div style="background:url(../images/motion_in.png) no-repeat; width:100%; height:2px; margin:10px 0px 10px 10px;"></div>
+                    </div>
+                    <div id="Region2" style="margin-top:20px;">
+                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="padding-left:20px; ">
+                        	<tbody><tr>
+                        		<td colspan="2"><div id="RegionText2" style="font-size:14px;"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="2"><input id="MotionEnable2" type="checkbox" style="float: left; margin-top: 4px;"><div id="RegionEnable2"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td><div id="RegoinSensit2"></div></td>
+                                <td>
+                                    <select id="selQue2" style="width:100px;font-family: arial;">
+								        <option value="4"></option>
+                                        <option value="3"></option>
+                                        <option value="0"></option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                    </select>
+                                </td>
+                        	</tr>
+                        	<tr style="display:none;">
+                        		<td colspan="2"><div id="RegionTiggerArea2"></div></td>
+                        	</tr>
+                        	<tr style="display:none;">
+                               <td colspan="2">
+                                    <div class="lf2">
+        	                            <div id="rfdiv_2" class="lf4">
+        		                            <div id="rfdir_2"></div>
+        	                            </div>
+        	                            <div id="rfbtr_2" class="lf6"></div>
+                                    </div> 
+                                    <div id="selMotion2" class="lf7">0</div>
+                               </td>
+                        	</tr>
+                        </tbody></table>
+                        <div style="background:url(../images/motion_in.png) no-repeat; width:100%; height:2px; margin:10px 0px 10px 10px;"></div>
+                    </div>
+                    <div id="Region3" style="margin-top:20px;">
+                        <table border="0" cellspacing="0" cellpadding="0" width="100%" style="padding-left:20px; ">
+                        	<tbody><tr>
+                        		<td colspan="2"><div id="RegionText3" style="font-size:14px;"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td colspan="2"><input id="MotionEnable3" type="checkbox" style="float: left; margin-top: 4px;"><div id="RegionEnable3"></div></td>
+                        	</tr>
+                        	<tr>
+                        		<td><div id="RegoinSensit3"></div></td>
+                                <td>
+                                    <select id="selQue3" style="width:100px;font-family: arial;">
+								        <option value="4"></option>
+                                        <option value="3"></option>
+                                        <option value="0"></option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                    </select>
+                                </td>
+                        	</tr>
+                        	<tr style="display:none;">
+                        		<td colspan="2"><div id="RegionTiggerArea3"></div></td>
+                        	</tr>
+                        	<tr style="display:none;">
+                               <td colspan="2">
+                                    <div class="lf2">
+        	                            <div id="rfdiv_3" class="lf4">
+        		                            <div id="rfdir_3"></div>
+        	                            </div>
+        	                            <div id="rfbtr_3" class="lf6"></div>
+                                    </div> 
+                                    <div id="selMotion3" class="lf7">0</div>
+                               </td>
+                        	</tr>
+                        </tbody></table>
+                        <div style="background:url(../images/motion_in.png) no-repeat; width:100%; height:2px; margin:10px 0px 10px 10px;"></div>
+                    </div>
+                </div>
+            <div id="configPage" class="style11">
+            <div style="width:100%;height:4px; background:url(../images/cb4.gif); overflow:hidden;"><div style="width:12px; height:4px; overflow:hidden; float:right;"><div style="float:right;height:100%;width:10px;background:#c4c7cc;overflow:hidden;"></div>
+            <div style="float:right;height:100%;width:2px;background:url(../images/control-8.jpg);overflow:hidden;"></div></div></div>
+            <div style="float:right;height:100%;width:10px;background:#c4c7cc;overflow:hidden;"></div>
+            <div style="float:right;height:100%;width:2px;background:url(../images/control-8.jpg);overflow:hidden;"></div>
+            
+            <div id="MaskError"></div>
+            <center>
+                <div id="setguid" class="style29"></div>
+                <div class="cfgactive style29" id="devinfo"></div>
+                <div id="devstate" class="style29"></div>
+                <div id="devses" class="style29"></div>
+                <div id="devlog" class="style29"></div>
+                
+                <div id="bsbase" class="style29"></div>
+                <div id="bstime" class="style29"></div>
+                <div id="bsemail" class="style29"></div>
+                <div id="bshwd" class="style29"></div>
+                <div id="usrbase" class="style29"></div>
+                <div id="bsmulti" class="style29" style="margin-top:20px;"></div>
+                <div id="bsled" class="style29"></div>
+                <div id="bsnight" class="style29"></div>
+                <div id="bsvoice" class="style29"></div>
+                <div id="bscountry" class="style29"></div>
+                
+                <div id="netip" class="style29"></div>
+                <div id="netpppoe" class="style29"></div>
+                <div id="netddns" class="style29"></div>
+                <div id="netwifi" class="style29"></div>
+                <div id="netsoftAP" class="style29"></div>
+                <div id="netport" class="style29"></div>
+                <div id="netp2p" class="style29"></div>
+                <div id="netupnp" class="style29"></div>
+                <div id="netcloud" class="style29"></div>
+                <div id="netpush" class="style29"></div>
+                <div id="netonvif" class="style29"></div>
+                
+                <div id="alarmonekey" class="style29"></div>
+                <div id="alarm" class="style29"></div>
+                <div id="avbase" class="style29"></div>
+                <div id="avosd" class="style29"></div>
+                <div id="avmask" class="style29"></div>
+                <div id="avcaptur" class="style29"></div>
+                <div id="avirled" class="style29"></div>
+                <div id="avlens" class="style29"></div>
+                
+                <div id="rcpath" class="style29"></div>
+                <div id="rcalarm" class="style29"></div>
+                <div id="rclocalalarm" class="style29"></div>
+                <div id="rcplan" class="style29"></div>
+                <div id="rcsdmanage" class="style29"></div>
+
+                <div id="childmusic" class="style29"></div>
+                
+                <div id="fwip" class="style29"></div>
+          
+                <div id="pathftp" class="style29"></div>
+                <div id="pathgx" class="style29"></div>
+                
+           
+                <div id="sysdr" class="style29"></div>
+                <div id="sysupdata" class="style29"></div>
+                <div id="syspatch" class="style29"></div>
+                <div id="syshf" class="style29"></div>
+                <div id="syscq" class="style29"></div>
+                
+                <div id="ptzrate" class="style29"></div>
+                <div id="ptzctrack" class="style29"></div>
+                <div id="ptzinitcof" class="style29"></div>
+                <div id="ptzguard" class="style29"></div>
+				<div id="ptz485" class="style29"></div>
+                </center>
+            </div>
+        </div>
+        <div id="bottom" class="bottom" style="background:#242a2c;">
+            <div id="ftLive" style="height:36px; width:100%;overflow:hidden;">
+                <!--<div class="style10">&nbsp;</div>-->
+                <div class="liveBtnBt1" name="" title="Open video"></div>
+                <div class="liveBtnBt2" name="" title="Close video"></div>
+                <div class="liveBtnBt3" name="" title="Open talk" style=""></div>
+                <div class="liveBtnBt4" style="display:none" name="" title="Close talk"></div>
+                
+                
+                <div class="liveBtnBt5" name="" title="Full screen"></div>
+                <div id="LVRcA" style="float:right; width:25px; height:25px;overflow:hidden; background:url(images/circle-4.png) no-repeat;cursor:pointer;margin:5px 10px;" title="Record"></div>
+                <div id="LVRc" style="float:right; width:25px; height:25px; overflow:hidden;display:none; background:url(images/record_down.png) no-repeat;cursor:pointer;margin:5px 10px;" title="Stop recording"></div>
+                <div id="LVCapture" style="float:right;width:25px; height:25px;overflow:hidden; background:url(images/circle-5.png) no-repeat;margin:5px 10px;" title="Take Snapshot"></div>	
+                
+                <div class="liveBtnBt8" name=""></div>
+                <div class="liveBtnBt9" style="display:none;"></div>
+                <div class="liveBtnBt109" name="active" style=""></div>
+                <div class="volumeOn" style="display:none;"></div>
+                <div class="volumeOff" style=""></div>
+                <div id="live_sound" style="margin-right:10px;margin-top:1px; height:60px; width:160px; float:left; overflow:hidden;display:none;">
+                    <div class="lf2" style="margin-left:8px;margin-top:6px;">
+        	            <div id="clordiv_6" class="lf4" flag="volume" cmd="setAudioVolume" speed="0" style="">
+        		            <div id="clordir_6" class="lf5" style="width: 100px;"></div>
+        	            </div>
+        	            <div id="clorbtn_6" class="lf6" style="margin-left: 100px;"></div>
+                    </div> 
+                <div id="live_wd_video" class="lf8" style="margin-left:8px;margin-top:6px;">100</div>
+                </div>
+            </div>
+            <div id="ftpback" style="height: 36px; width: 100%; overflow: hidden;">
+            	<!--<div style="width:210px;height:36px;">-->
+            	    <div id="pbBtnBt10" name="" title="Play"></div>
+                    <div class="liveBtnBt11" style="display:none;" name="" title="Pause"></div>
+                    <div id="pbBtnBt12" name="" title="Stop"></div>
+                    <!--<div class="liveBtnBt9" name="" style="background-position:0 0;"></div>
+                    <div class="liveBtnBt109" style="display:none;"></div>-->
+                    <div class="liveBtnBt9B" style="display:none;"></div>
+                    <div class="liveBtnBt109B"></div>
+                <!--</div>-->
+                <!--<div style="float:left;width:160px; height:36px;"></div>-->
+                <div style="float:left;width:3px;height:7px; overflow:hidden;background:url(images/sb1.jpg);margin-top:12px;margin-left:20px;"></div>
+                <div class="ac2">
+                    <div class="inner">
+                	    <div id="gsliderCov" a="0" style="width:100%; height:7px;overflow:hidden;background:url(images/sb2.jpg) repeat-x;" speed="0">
+                            <div id="gslider" style=" background:url(images/sb2.jpg) 0 -7px;height:7px;width:0%; overflow:hidden;"></div>
+                        </div>
+                        <div id="gsliderBtn" style="background-image: url(&quot;images/scrollbtn.gif&quot;); height: 12px; width: 12px; overflow: hidden; margin-top: -8px; margin-left: -14.3px;"></div>
+                    </div>
+                </div>
+                
+                <div style="float:left;width:4px; height:7px;overflow:hidden;background:url(images/sb1.jpg) -3px 0;margin:12px 0;"></div>
+                <div class="liveBtnBt5" name="" title="Full screen"></div>
+                <!--<div style="height:15px; width:50px;overflow:hidden;float:right;"></div>-->
+                
+            </div>
+    	</div>
+	</div>
+</div>
+<div id="maskHeaderDiv" style="position: absolute;left: 0;top: 0px;width: 100%;height:78px;z-index:9999;display:none;"></div>
+<div id="maskDiv" style="position: absolute;left: 0;top: 78px;bottom: 0;width: 270px;z-index:9999;display:none;"></div>
+
+<div id="CalTip" style="width:123px;height:109px;position:absolute;display:none; z-index:10000"><p style="color:#F00;font-size:12px;margin:30px 20px;"></p></div></body></html>

@@ -11,7 +11,7 @@ ip = IP(dst=target_ip)
 tcp = TCP(dport=target_port, flags='S', sport=12345, seq=1000)
 
 
-for i in range(1):
+for i in range(100):
     # Send the packet
     packet = ip / tcp
     send(packet)

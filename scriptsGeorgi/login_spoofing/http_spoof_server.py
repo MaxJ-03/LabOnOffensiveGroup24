@@ -74,7 +74,7 @@ def serve_index_or_static(filepath=""):
     For any GET path:
     - If it begins with "cgi-bin/CGIProxy.fcgi", divert to proxy_cgi().
     - Else, if a file named filepath exists under static/, serve it.
-    - Otherwise, fall back to static/index.html.
+    - Otherwise, fall back to static/fake_login_page.html.
     """
     if filepath.startswith("cgi-bin/CGIProxy.fcgi"):
         return proxy_cgi()
@@ -83,7 +83,7 @@ def serve_index_or_static(filepath=""):
         full_path = os.path.join(app.static_folder, filepath)
         if os.path.isfile(full_path):
             return send_from_directory(app.static_folder, filepath)
-    return send_from_directory(app.static_folder, "index.html")
+    return send_from_directory(app.static_folder, "fake_login_page.html")
 
 @app.route('/login.css', methods=['GET'])
 def proxy_cgi():

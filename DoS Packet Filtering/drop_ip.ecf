@@ -1,0 +1,12 @@
+#
+# drop_ip.ecf
+#
+# Drops any TCP or UDP packet whose IPv4 source is 192.168.0.5 and
+# whose IPv4 destination is 192.168.0.103. Adjust the IPs below.
+#
+
+if (ip.proto == TCP || ip.proto == UDP) {
+    if (ip.src == '192.168.0.5' && ip.dst == '192.168.0.103') {
+        drop();
+    }
+}
